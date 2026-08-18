@@ -1,0 +1,33 @@
+name: change-set-review-protocol
+
+on:
+  pull_request:
+    paths:
+      - 'sinergy_ai_coder/**'
+      - 'schemas/engineering_change_set_v1.schema.json'
+      - 'tests/test_change_set.py'
+      - 'tests/test_change_set_schema.py'
+      - 'docs/CHANGE_SET_REVIEW_PROTOCOL_20260818.md'
+      - '.github/workflows/change-set-review-protocol.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: change-set-review-protocol-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review-protocol:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pytest
+        run: python -m pip install --upgrade pip pytest
+      - name: Compile engineering protocol
+        run: python -m compileall -q sinergy_ai_coder
+      - name: Run protocol regressions
+        run: python -m pytest tests/test_change_set.py tests/test_change_set_schema.py -q
