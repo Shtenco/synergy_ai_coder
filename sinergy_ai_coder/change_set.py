@@ -4,6 +4,9 @@ from dataclasses import dataclass
 from typing import Iterable
 
 
+CHANGE_SET_SCHEMA = "engineering.change-set/v1"
+
+
 class ChangeSetInvariantError(ValueError):
     """Raised when an engineering change set is malformed or unsafe."""
 
@@ -46,7 +49,9 @@ REQUIRED_EVIDENCE: dict[str, frozenset[str]] = {
     ),
     "TRUST": frozenset({"UNIT_TEST", "SECURITY_REVIEW", "SCHEMA_CONFORMANCE"}),
     "AI": frozenset({"UNIT_TEST", "SCHEMA_CONFORMANCE", "HUMAN_REVIEW"}),
-    "SMART_CONTRACT": frozenset({"UNIT_TEST", "FORK_TEST", "SECURITY_REVIEW", "HUMAN_REVIEW"}),
+    "SMART_CONTRACT": frozenset(
+        {"UNIT_TEST", "FORK_TEST", "SECURITY_REVIEW", "HUMAN_REVIEW"}
+    ),
     "PUBLIC_SURFACE": frozenset({"STATIC_ANALYSIS"}),
     "GENERAL": frozenset({"UNIT_TEST"}),
 }
@@ -110,6 +115,15 @@ class EvidenceRecord:
         object.__setattr__(self, "digest", digest)
         object.__setattr__(self, "source_ref", source_ref)
 
+    def to_dict(self) -> dict[str, str | None]:
+        return {
+            "evidence_id": self.evidence_id,
+            "kind": self.kind,
+            "status": self.status,
+            "digest": self.digest,
+            "source_ref": self.source_ref,
+        }
+
 
 @dataclass(frozen=True)
 class EngineeringChangeSet:
@@ -142,6 +156,8 @@ class EngineeringChangeSet:
         if unknown:
             raise ChangeSetInvariantError(f"unsupported risk domains: {sorted(unknown)}")
         evidence = tuple(self.evidence)
+        if any(not isinstance(item, EvidenceRecord) for item in evidence):
+            raise ChangeSetInvariantError("evidence entries must be EvidenceRecord values")
         evidence_ids = [item.evidence_id for item in evidence]
         if len(evidence_ids) != len(set(evidence_ids)):
             raise ChangeSetInvariantError("evidence_id values must be unique")
@@ -159,6 +175,19 @@ class EngineeringChangeSet:
         object.__setattr__(self, "evidence", evidence)
         object.__setattr__(self, "summary", summary)
         object.__setattr__(self, "automation_authority", authority)
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "schema": CHANGE_SET_SCHEMA,
+            "change_set_id": self.change_set_id,
+            "repositories": list(self.repositories),
+            "requirement_refs": list(self.requirement_refs),
+            "hardening_refs": list(self.hardening_refs),
+            "risk_domains": list(self.risk_domains),
+            "evidence": [item.to_dict() for item in self.evidence],
+            "summary": self.summary,
+            "automation_authority": self.automation_authority,
+        }
 
 
 @dataclass(frozen=True)
