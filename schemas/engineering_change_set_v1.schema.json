@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sinergy.system/schemas/engineering.change-set/v1",
+  "title": "SINERGY EngineeringChangeSet v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "change_set_id",
+    "repositories",
+    "requirement_refs",
+    "hardening_refs",
+    "risk_domains",
+    "evidence",
+    "summary",
+    "automation_authority"
+  ],
+  "properties": {
+    "schema": {"const": "engineering.change-set/v1"},
+    "change_set_id": {"type": "string", "minLength": 1},
+    "repositories": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[^/]+/[^/]+$"}
+    },
+    "requirement_refs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^REQ-[A-Z0-9-]+$"}
+    },
+    "hardening_refs": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^HARDEN-[A-Z0-9-]+$"}
+    },
+    "risk_domains": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "FINANCIAL",
+          "MATURITY",
+          "PAYMENT",
+          "TRUST",
+          "AI",
+          "SMART_CONTRACT",
+          "PUBLIC_SURFACE",
+          "GENERAL"
+        ]
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["evidence_id", "kind", "status", "digest", "source_ref"],
+        "properties": {
+          "evidence_id": {"type": "string", "minLength": 1},
+          "kind": {
+            "enum": [
+              "STATIC_ANALYSIS",
+              "UNIT_TEST",
+              "INTEGRATION_TEST",
+              "FORK_TEST",
+              "SECURITY_REVIEW",
+              "ECONOMIC_REVIEW",
+              "SCHEMA_CONFORMANCE",
+              "HUMAN_REVIEW",
+              "CI_RUN"
+            ]
+          },
+          "status": {"enum": ["PASS", "FAIL", "PENDING", "NOT_RUN"]},
+          "digest": {
+            "oneOf": [
+              {"type": "string", "pattern": "^[a-fA-F0-9]{64}$"},
+              {"type": "null"}
+            ]
+          },
+          "source_ref": {"oneOf": [{"type": "string", "minLength": 1}, {"type": "null"}]}
+        }
+      }
+    },
+    "summary": {"type": "string", "minLength": 1},
+    "automation_authority": {"const": "NONE"}
+  }
+}
