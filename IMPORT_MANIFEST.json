@@ -1,0 +1,15 @@
+{
+  "schema": "synergy.import_manifest/v1",
+  "import_id": "synergy-723-2026-09",
+  "repository": "Shtenco/ai_coder",
+  "mapped_artifact_count": 1,
+  "direct_payload_artifact_count": 1,
+  "external_evidence_pending_count": 0,
+  "payload_path": "imports/synergy-723-2026-09/code_payload.tar.xz",
+  "payload_sha256": "029d25b6259812e5f930074cc54ff88536bdc05a4124037797a2df815e5ceaba",
+  "payload_format": "tar.xz; archive members use final repository target_path",
+  "full_manifest_inside_payload": true,
+  "quarantine_excluded": [".env", "dao_robots_keys.json", "withdraw_pw.py"],
+  "generated_excluded": ["SINERGY_BOT_MINIMAL.cpython-312.pyc"],
+  "promotion_rule": "Import preserves provenance; R&D/LEGACY artifacts are not promoted to CANONICAL by migration."
+}
