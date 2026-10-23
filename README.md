@@ -1,3 +1,43 @@
+<div align="center">
+
+<img src="assets/readme/hero.svg" alt="AI CODER vector hero" width="100%"/>
+
+**Engineering contracts, requirement traceability and change evidence**
+
+[Overview](#verified-overview) · [Architecture](#architecture-map) · [Evidence](#evidence-boundary) · [Documentation](#original-technical-documentation)
+
+</div>
+
+## Verified overview
+
+Engineering contracts, requirement traceability and change evidence. Main repository entry: `runtime/contracts.py`. This page presents a research or engineering codebase and does not imply verified production deployment.
+
+## Architecture map
+
+```mermaid
+flowchart LR
+A[Source and configuration] --> B[Implemented project modules]
+B --> C[Output or presentation]
+C --> D[Independent validation and review]
+```
+
+The diagram represents conceptual flow; it does not assert a live deployment.
+
+## Evidence boundary
+
+> Contract validation exists; successful builds and production deployments require independent checks.
+
+| Domain | Interpretation |
+|:--|:--|
+| Repository files | Inspectable implementation artifacts |
+| Test and CI results | Require separate current run evidence |
+| Performance metrics | Require timestamped and reproducible evaluation |
+| Production claims | Not established solely by documentation |
+
+## Original technical documentation
+
+---
+
 # 👨‍💻 SYNERGY AI Coder — verified technical dossier
 
 > **Статус:** 🟡 CANDIDATE / contract-runtime implemented, production execution not proven.
