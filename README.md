@@ -38,13 +38,13 @@ The diagram represents conceptual flow; it does not assert a live deployment.
 
 ---
 
-# 👨‍💻 SYNERGY AI Coder — verified technical dossier
+# ‍ SYNERGY AI Coder — verified technical dossier
 
-> **Статус:** 🟡 CANDIDATE / contract-runtime implemented, production execution not proven.
+> **Статус:**  CANDIDATE / contract-runtime implemented, production execution not proven.
 > **Проверено по фактическому `main`:** 29.09.2026.
 > **Архитектурный родитель:** [`synergy_agi_nexus`](https://github.com/Shtenco/synergy_agi_nexus)
 
-## 1. 🎯 Проблема
+## 1.  Проблема
 
 AI может генерировать код быстро, но сам факт генерации ничего не доказывает. Этот репозиторий отвечает за инженерную границу между:
 
@@ -59,7 +59,7 @@ requirement
 
 Главная задача — не дать системе перепутать «AI написал код» с «изменение проверено и может быть передано дальше».
 
-## 2. 📦 Фактическое дерево `main`
+## 2.  Фактическое дерево `main`
 
 ```text
 synergy_ai_coder/
@@ -74,7 +74,7 @@ synergy_ai_coder/
 
 То есть репозиторий уже **не STUB**: в нём есть реальный runtime contract layer и unit tests.
 
-## 3. 🧠 Реализованная модель
+## 3.  Реализованная модель
 
 `runtime/contracts.py` содержит два контрактных идентификатора:
 
@@ -122,22 +122,22 @@ engineering_evidence
 - `APPROVED` запрещён, если хотя бы один check не `PASS`;
 - artifact bytes, если присутствуют, хэшируются SHA-256.
 
-## 4. 🏗️ Архитектура
+## 4.  Архитектура
 
 ```mermaid
 flowchart LR
-    L[🧠 AI Language / requirement trace] --> C[👨‍💻 AI Coder]
-    C --> G[💻 Generated or modified code]
-    G --> B[🔧 Build / checks]
-    B --> E[📦 Check evidence]
+    L[ AI Language / requirement trace] --> C[‍ AI Coder]
+    C --> G[ Generated or modified code]
+    G --> B[ Build / checks]
+    B --> E[ Check evidence]
     E --> R{Review status}
-    R -->|APPROVED + all PASS| CE[🧾 Change Evidence]
-    CE --> M[⚙️ Meta-OS / downstream consumer]
+    R -->|APPROVED + all PASS| CE[ Change Evidence]
+    CE --> M[ Meta-OS / downstream consumer]
 ```
 
 Ключевая идея: downstream получает не «код хороший», а структурированное evidence с commit SHA, requirement ids, checks, review status и artifact hash.
 
-## 5. 📥 Inputs
+## 5.  Inputs
 
 Реализованный input boundary:
 
@@ -151,7 +151,7 @@ status
 
 Критически важно: requirement обязан явно таргетировать текущий репозиторий.
 
-## 6. 📤 Outputs
+## 6.  Outputs
 
 `change_evidence_payload` формирует:
 
@@ -167,7 +167,7 @@ artifact_sha256
 
 Это engineering evidence, но **не deployment authorization** и не proof production correctness.
 
-## 7. 🛡️ Authority boundaries / invariants
+## 7.  Authority boundaries / invariants
 
 ```text
 generated source != validated source
@@ -187,7 +187,7 @@ AI Coder не должен:
 - превращать skipped checks в pass;
 - принимать requirement, который не адресован этому repo.
 
-## 8. 🧪 Реальные тесты
+## 8.  Реальные тесты
 
 `tests/test_contracts.py` сейчас проверяет минимум три негативно/позитивно важных свойства:
 
@@ -197,7 +197,7 @@ AI Coder не должен:
 
 Это реальные unit tests контрактного слоя. README **не утверждает**, что они уже наблюдались в зелёном CI run.
 
-## 9. 📚 Legacy distillation
+## 9.  Legacy distillation
 
 `docs/LEGACY_DISTILLATION_V2_OWNER.md` назначает этому repository:
 
@@ -214,7 +214,7 @@ AI Coder не должен:
 - artifact hashes;
 - generated Solidity/source ≠ validated artifact.
 
-## 10. 🔐 Threat / failure model
+## 10.  Threat / failure model
 
 | Failure mode | Gate |
 |---|---|
@@ -238,7 +238,7 @@ AI Coder не должен:
 - review status downgrade/upgrade provenance;
 - multiple reviewers / policy threshold.
 
-## 11. 🛠️ Воспроизводимость
+## 11.  Воспроизводимость
 
 Минимальный локальный путь:
 
@@ -251,7 +251,7 @@ pytest -q
 
 Этот command path следует считать **ожидаемым**, пока конкретный run не сохранён как observed evidence.
 
-## 12. 🗺️ Карта файлов
+## 12.  Карта файлов
 
 | Путь | Назначение |
 |---|---|
@@ -260,7 +260,7 @@ pytest -q
 | `docs/LEGACY_DISTILLATION_V2_OWNER.md` | owner manifest legacy mechanisms |
 | `README.md` | технический паспорт |
 
-## 13. 🔗 Место в SYNERGY
+## 13.  Место в SYNERGY
 
 ```mermaid
 flowchart LR
@@ -276,21 +276,21 @@ flowchart LR
 - [`synergy_agi_autopilot`](https://github.com/Shtenco/synergy_agi_autopilot) — orchestration;
 - [`synergy_meta_os`](https://github.com/Shtenco/synergy_meta_os) — downstream execution boundary.
 
-## 14. 📊 Evidence maturity
+## 14.  Evidence maturity
 
 | Layer | Status |
 |---|---|
-| architecture | ✅ |
-| typed runtime contracts | ✅ |
-| unit tests in repository | ✅ |
-| artifact hashing | ✅ |
-| requirement targeting guard | ✅ |
-| approval all-pass guard | ✅ |
-| observed CI execution | ❌ not proven here |
-| cross-repo E2E evidence | ❌ not promoted |
-| production deployment | ❌ |
+| architecture |  |
+| typed runtime contracts |  |
+| unit tests in repository |  |
+| artifact hashing |  |
+| requirement targeting guard |  |
+| approval all-pass guard |  |
+| observed CI execution |  not proven here |
+| cross-repo E2E evidence |  not promoted |
+| production deployment |  |
 
-## 15. 🚀 Roadmap
+## 15.  Roadmap
 
 - [ ] schema files for both contracts;
 - [ ] provenance signature / signer identity;
@@ -303,7 +303,7 @@ flowchart LR
 - [ ] M5 observed federation execution;
 - [ ] only then consider `E2E_TESTED`.
 
-## 16. 🛑 Что проект НЕ утверждает
+## 16.  Что проект НЕ утверждает
 
 - что AI-generated code автоматически корректен;
 - что текущие unit tests покрывают semantic correctness;
@@ -314,4 +314,4 @@ flowchart LR
 
 ---
 
-[🧭 SYNERGY SYSTEM](https://github.com/Shtenco/synergy_system) · [📚 Атлас 75 репозиториев](https://github.com/Shtenco/synergy_system/blob/main/docs/SYNERGY_REPOSITORY_ATLAS.md) · [🧾 Registry](https://github.com/Shtenco/synergy_system/blob/main/registry/SYNERGY_REPOSITORIES.json)
+[ SYNERGY SYSTEM](https://github.com/Shtenco/synergy_system) · [ Атлас 75 репозиториев](https://github.com/Shtenco/synergy_system/blob/main/docs/SYNERGY_REPOSITORY_ATLAS.md) · [ Registry](https://github.com/Shtenco/synergy_system/blob/main/registry/SYNERGY_REPOSITORIES.json)
